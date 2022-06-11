@@ -1248,7 +1248,7 @@ function dgenart() {
       this.kill_radius = kill_radius;
     }
   }
-  this.space_growth_tree class dSpace_Growth_Tree {
+  this.space_growth_tree = class dSpace_Growth_Tree {
     constructor(origin, interval) {
       this.origin = origin;
       this.interval = interval;
