@@ -1,10 +1,9 @@
-function dgenart() {
-  let _this = this;
-  this.math = class dMath {
-    static epsilon = 0.0001;
+function DGenArt() {
+  let dMath = class dMath {
+    static epsilon() { return 0.0001; }
   
-    static PI = 3.14159265359;
-    static TAU = 6.28318530717;
+    static PI() { return 3.14159265359; }
+    static TAU() { return 6.28318530717; }
     
     static lerp(a, b, t) {
       let d = b - a;
@@ -47,17 +46,17 @@ function dgenart() {
       while (v0.z > n3) { v0.z -= n3; }
       return v0;
     }
-  }
-  this.vector2 = class dvector {
+  };
+  let dvector = class dvector {
     constructor(x, y) {
       this.x = x;
       this.y = y;
     }
-    static zero = new dvector(0, 0);
-    static up = new dvector(0, 1);
-    static down = new dvector(0, -1);
-    static right = new dvector(1, 0);
-    static left = new dvector(-1, 0);
+    static zero() { return new dvector(0, 0); }
+    static up() { return new dvector(0, 1); }
+    static down() { return new dvector(0, -1); }
+    static right() { return new dvector(1, 0); }
+    static left() { return new dvector(-1, 0); }
 
     mag() { return Math.sqrt(this.x*this.x + this.y*this.y); }
     magsq() { return this.x*this.x + this.y*this.y; }
@@ -86,7 +85,7 @@ function dgenart() {
     div_vec(v) { return new dvector(this.x/v.x, this.y/v.y); }
     div_vec_equals(v) { this.x /= v.x; this.y /= v.y; }
 
-    dot(v) { return(this.x*v.x + this.y*v.y) }
+    dot(v) { return(this.x*v.x + this.y*v.y); }
 
     rotate(a) {
       let x = Math.cos(a)*this.x - Math.sin(a)*this.y;
@@ -141,7 +140,7 @@ function dgenart() {
       let pn = pt.sub(bt.normalize().mult(pd));
       let pr = pt.sub(pn.mult(2));
       let ptr = pr.add(a);
-      this.x = ptr.x; this.y = ptr.y
+      this.x = ptr.x; this.y = ptr.y;
     }
   
     rot_lerp(v, t) {
@@ -155,20 +154,20 @@ function dgenart() {
       this.normalize_equals();
       this.mult_equals(m);
     }
-  }
-  this.vector3 = class dvector3 {
+  };
+  let dvector3 = class dvector3 {
     constructor(x, y, z) {
       this.x = x;
       this.y = y;
       this.z = z;
     }
-    static zero = new dvector3(0, 0, 0);
-    static up = new dvector3(0, 1, 0);
-    static down = new dvector3(0, -1, 0);
-    static left = new dvector3(-1, 0, 0);
-    static right = new dvector3(1, 0, 0);
-    static forward = new dvector3(0, 0, 1);
-    static backward = new dvector3(0, 0, -1);
+    static zero() { return new dvector3(0, 0, 0); }
+    static up() { return new dvector3(0, 1, 0); }
+    static down() { return new dvector3(0, -1, 0); }
+    static left() { return new dvector3(-1, 0, 0); }
+    static right() { return new dvector3(1, 0, 0); }
+    static forward() { return new dvector3(0, 0, 1); }
+    static backward() { return new dvector3(0, 0, -1); }
     mag() {
       return Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.z);
     }
@@ -272,8 +271,8 @@ function dgenart() {
         v.y + q.w * ty + q.z * tx - q.x * tz,
         v.z + q.w * tz + q.x * ty - q.y * tx);
     }
-  }
-  this.geom = class dGeom {
+  };
+  let dGeom = class dGeom {
     constructor() {}
   
     static av_points(p) {
@@ -326,7 +325,7 @@ function dgenart() {
   
     static point_in_poly(point, poly, transform=dvector.zero, scale=1) {
       let bounds = poly.get_bounds();
-      let points = poly.get_points(transform, scale)
+      let points = poly.get_points(transform, scale);
       let p1 = point;
       let p2 = new dvector(bounds[1].x*10*scale, point.y);
       let num_intersect = 0;
@@ -345,8 +344,8 @@ function dgenart() {
       let dist = v.dot(plane_normal);
       return dist;
     }
-  }
-  this.phys2 = class dPhys {
+  };
+  let dPhys = class dPhys {
     constructor() {}
   
     static grav(a, b, g, dt=1, affect=2, scale=1) {
@@ -361,8 +360,8 @@ function dgenart() {
       }
       return vec.normalize().mult(f);
     }
-  }
-  this.grid2 = class dGrid {
+  };
+  let dGrid = class dGrid {
     constructor(w, h, init=0, loop=false) {
       this.width = w;
       this.height = h;
@@ -390,7 +389,7 @@ function dgenart() {
         else if (b == null) { return this.init; }
         else { return b; }
       }
-      else if (x != NaN && y != NaN) { return this.grid[x][y]; }
+      else if (!isNaN(x) && !isNaN(y)) { return this.grid[x][y]; }
       else { return this.grid[0][0]; }
     }
   
@@ -422,8 +421,8 @@ function dgenart() {
       let r3 = [this.get(vf.x + 1, vf.y + 1), v3.mag()/va];
       return [r0, r1, r2, r3];
     }
-  }
-  this.grid3 = class dGrid3 {
+  };
+  let dGrid3 = class dGrid3 {
     constructor(w, h, d, init=0, loop=false) {
       this.width = w;
       this.height = h;
@@ -475,8 +474,8 @@ function dgenart() {
         this.grid[tx][ty][tz] = v;
       }
     }
-  }
-  this.grid2_buffer = class dGrid_Buffer {
+  };
+  let dGrid_Buffer = class dGrid_Buffer {
     constructor(width, height, init=0, loop=false) {
       this.width = width;
       this.height = height;
@@ -512,8 +511,8 @@ function dgenart() {
         }
       }
     }
-  }
-  this.grid3_buffer = class dGrid3_Buffer {
+  };
+  let dGrid3_Buffer = class dGrid3_Buffer {
     constructor(width, height, depth, init=0, loop=false) {
       this.width = width;
       this.height = height;
@@ -554,15 +553,15 @@ function dgenart() {
         }
       }
     }
-  }
-  this.quaternion = class dquaternion {
+  };
+  let dquaternion = class dquaternion {
     constructor(x, y, z, w) {
       this.x = x;
       this.y = y;
       this.z = z;
       this.w = w;
     }
-    static zero = new dquaternion(0, 0, 0, 0);
+    static zero() { return new dquaternion(0, 0, 0, 0); }
   
     mag() {
       return Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.z + this.w*this.w);
@@ -653,8 +652,8 @@ function dgenart() {
   
       return new dvector3(x, y, z);
     }
-  }
-  this.perlin2 = class dPerlin2 {
+  };
+  let dPerlin2 = class dPerlin2 {
     constructor(lookup_length, seed=dRandom.random(-1000, 1000)) {
       this.lookup = [];
       for (let i = 0; i < lookup_length; i++) { this.lookup.push(i); }
@@ -740,8 +739,8 @@ function dgenart() {
       }
       return values;
     }
-  }
-  this.random = class dRandom {
+  };
+  let dRandom = class dRandom {
     constructor() {}
   
     static sfc32(a, b, c, d) {
@@ -755,7 +754,7 @@ function dgenart() {
         t = t + d | 0;
         c = c + t | 0;
         return (t >>> 0) / 4294967296;
-      }
+      };
     }
   
     static random(a=0, b=1) {
@@ -794,8 +793,8 @@ function dgenart() {
     static perlin_gen(seed=dRandom.random(-1000, 1000)) {
       return new dPerlin2(256, seed);
     }
-  }
-  this.camera = class dCamera {
+  };
+  let dCamera = class dCamera {
     constructor(pos, dir, up, length, width, height) {
       this.pos = pos;
       this.dir = dir;
@@ -850,8 +849,8 @@ function dgenart() {
       return new dvector3(xy.x, xy.y, dist/this.length);
     }
   
-  }
-  this.poly = class dPoly {
+  };
+  let dPoly = class dPoly {
     constructor(points) {
       this.points = [...points];
       for (let i = 0; i < this.points.length; i++) {
@@ -859,18 +858,18 @@ function dgenart() {
       }
     }
   
-    static unit_triangle = new dPoly([
+    static unit_triangle() { return new dPoly([
       new dvector(1, 0),
       new dvector(1, 0).rotate(2*Math.PI/3),
       new dvector(1, 0).rotate(-2*Math.PI/3)
-    ]);
+    ]); }
   
-    static unit_square = new dPoly([
+    static unit_square() { return new dPoly([
       new dvector(1, 0).rotate(Math.PI/4),
       new dvector(1, 0).rotate(Math.PI/2 + Math.PI/4),
       new dvector(1, 0).rotate(Math.PI + Math.PI/4),
       new dvector(1, 0).rotate(-Math.PI/2 + Math.PI/4)
-    ]);
+    ]); }
   
     static circle(r, n) {
       let points = [];
@@ -970,7 +969,7 @@ function dgenart() {
         let p = this.points[i].copy();
         let v = p.sub(centre);
         v.mult_equals(1 + perlin.perlin(v, dvector.zero, freq, amp));
-        v.mult_equals(scale)
+        v.mult_equals(scale);
         points.push(centre.add(v).add(transform));
       }
       return points; 
@@ -1035,8 +1034,8 @@ function dgenart() {
         }
       }
     }
-  }
-  this.spline_point = class dSpline_Point {
+  };
+  let dSpline_Point = class dSpline_Point {
     constructor(pos, fa, fm, ba, bm) {
       this.pos = pos;
       this.fa = fa;
@@ -1052,7 +1051,7 @@ function dgenart() {
     }
   
     get_back() {
-      let vec = new dvector(this.bm, 0)
+      let vec = new dvector(this.bm, 0);
       vec.rotate_equals(this.ba);
       return vec.add(this.pos);
     }
@@ -1065,8 +1064,8 @@ function dgenart() {
       this.fm = mag;
       this.bm = mag;
     }
-  }
-  this.spline = class dSpline {
+  };
+  let dSpline = class dSpline {
     constructor(points) {
       this.points = points;
     }
@@ -1109,8 +1108,8 @@ function dgenart() {
       let p = this.get_points(n, vec, loop);
       return new dPoly(p);
     }
-  }
-  this.mover2 = class dMover {
+  };
+  let dMover = class dMover {
     constructor(pos, vel, mass=1) {
       this.pos = pos;
       this.vel = vel;
@@ -1137,11 +1136,11 @@ function dgenart() {
         this.pos.add_equals(this.vel);
       }
     }
-  }
-  this.collider2 = class dCollider {
+  };
+  let dCollider = class dCollider {
     constructor() {}
     
-    static circle = class dCircleCollider {
+    static circle() { return class dCircleCollider {
       constructor(pos, radius) {
         this.pos = pos;
         this.radius = radius;
@@ -1154,9 +1153,9 @@ function dgenart() {
         }
         else { return [false, dvector.zero, dvector.right]; }
       }
-    }
+    }; }
   
-    static rect = class dRectCollider {
+    static rect() { return class dRectCollider {
       constructor(pos, side_length_a, side_length_b) {
         this.pos = pos;
         this.side_length_a = side_length_a;
@@ -1194,9 +1193,9 @@ function dgenart() {
           }
         } else { return [false, dvector.zero]; }
       }
-    }
+    }; }
   
-    static poly = class dPolyCollider {
+    static poly() { return class dPolyCollider {
       constructor(poly, pos=dvector.zero, scale=1) {
         this.poly = poly;
         this.pos = pos;
@@ -1221,34 +1220,32 @@ function dgenart() {
             min0 = minp;
           }
           else { min0 = minn; card = 1; }
-          let bounds = this.poly.get_bounds();
-          let bvec = bounds[1].sub(bounds[0]);
           let v = points[min0].sub(points[min[0]]);
           let u = points[min[0]].sub(p);
           let t = -1 * v.dot(u)/v.dot(v);
           if (t >= 1) { return [true, points[min0], points[min0].sub(this.poly.get_centre()).normalize()]; }
           else if (t <= 0) { return [true, points[min[0]], points[min[0]].sub(this.poly.get_centre()).normalize()]; }
-          let p0 = points[min[0]].lerp(points[min0], t)
+          let p0 = points[min[0]].lerp(points[min0], t);
           let n = v.rotate(card*Math.PI/2).normalize();
           return[true, p0, n];
         }
       } 
-    }
-  }
-  this.space_growth_node = class dSpace_Growth_Node {
+    }; }
+  }; 
+  let dSpace_Growth_Node = class dSpace_Growth_Node {
     constructor(pos, parent=null) {
       this.pos = pos;
       this.parent = parent;
       this.children = [];
     }
-  }
-  this.space_growth_attractor = class dSpace_Growth_Attractor {
+  };
+  let dSpace_Growth_Attractor = class dSpace_Growth_Attractor {
     constructor(pos, kill_radius) {
       this.pos = pos;
       this.kill_radius = kill_radius;
     }
-  }
-  this.space_growth_tree = class dSpace_Growth_Tree {
+  };
+  let dSpace_Growth_Tree = class dSpace_Growth_Tree {
     constructor(origin, interval) {
       this.origin = origin;
       this.interval = interval;
@@ -1292,7 +1289,7 @@ function dgenart() {
       let connections = {};
       let kill = [];
       for (let i = 0; i < this.attractors.length; i++) {
-        let min = [0, 10000]
+        let min = [0, 10000];
         for (let j = 0; j < this.nodes.length; j++) {
           let dist = this.nodes[j].pos.sub(this.attractors[i].pos).mag();
           if (dist < min[1] && (!rc || (rc && dist < r))) {
@@ -1307,19 +1304,21 @@ function dgenart() {
       }
   
       for (const key_index in connections) {
-        let value = connections[key_index];
-        let key = this.nodes[key_index];
-        //console.log(key, value);
-        let av = new dvector(0, 0);
-        for (let i = 0; i < value.length; i++) {
-          av.add_equals(value[i].pos);
+        if (key_index < this.nodes.length) {
+          let value = connections[key_index];
+          let key = this.nodes[key_index];
+          //console.log(key, value);
+          let av = new dvector(0, 0);
+          for (let i = 0; i < value.length; i++) {
+            av.add_equals(value[i].pos);
+          }
+          av.div_equals(value.length);
+          let dir = av.sub(key.pos).normalize();
+          let n = new dSpace_Growth_Node(key.pos.add(dir.mult(this.interval)), key);
+          if (poly == null) { this.nodes.push(n); key.children.push(n); }
+          else if (dGeom.point_in_poly(n.pos, poly)) { this.nodes.push(n); key.children.push(n); }
         }
-        av.div_equals(value.length);
-        let dir = av.sub(key.pos).normalize();
-        let n = new dSpace_Growth_Node(key.pos.add(dir.mult(this.interval)), key);
-        if (poly == null) { this.nodes.push(n); key.children.push(n); }
-        else if (dGeom.point_in_poly(n.pos, poly)) { this.nodes.push(n); key.children.push(n); }
-        
+          
       }
   
       for (let i = 0; i < kill.length; i++) {
@@ -1329,5 +1328,28 @@ function dgenart() {
   
       return connections;
     }
-  }
+  };
+  this.Vector2 = dvector;
+  this.Vector3 = dvector3;
+  this.Quaternion = dquaternion;
+  this.Math = math;
+  this.Random = dRandom;
+  this.Perlin2 = dPerlin2;
+  this.Phys2 = phys;
+  this.Geom = geom;
+  this.Poly = dPoly;
+  this.Grid2 = dGrid;
+  this.Grid3 = dGrid3;
+  this.Grid2_Buffer = dGrid_Buffer;
+  this.Grid3_Buffer = dGrid3_Buffer;
+  this.Spline_Point = dSpline_Point;
+  this.Spline = dSpline;
+  this.Mover = dMover;
+  this.Collider = dCollider;
+  this.SC_Node = dSpace_Growth_Node;
+  this.SC_Attractor = dSpace_Growth_Attractor;
+  this.SC_Tree = dSpace_Growth_Tree;
+  this.Camera = dCamera;
 }
+
+var d = new DGenArt();
