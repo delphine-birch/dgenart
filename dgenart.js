@@ -154,6 +154,13 @@ function DGenArt() {
       this.normalize_equals();
       this.mult_equals(m);
     }
+    is_equal(v) { if (v.x == this.x && v.y == this.y) { return true; } else { return false; } }
+
+    is_approx_equal(v, n) {
+      let v0 = this.sub(v);
+      if (Math.abs(v0.x) > n || Math.abs(v0.y) > n) { return false; }
+      else { return true; }
+    }
   };
   let dvector3 = class dvector3 {
     constructor(x, y, z) {
@@ -1332,11 +1339,11 @@ function DGenArt() {
   this.Vector2 = dvector;
   this.Vector3 = dvector3;
   this.Quaternion = dquaternion;
-  this.Math = math;
+  this.Math = dMath;
   this.Random = dRandom;
   this.Perlin2 = dPerlin2;
-  this.Phys2 = phys;
-  this.Geom = geom;
+  this.Phys2 = dPhys;
+  this.Geom = dGeom;
   this.Poly = dPoly;
   this.Grid2 = dGrid;
   this.Grid3 = dGrid3;
@@ -1353,3 +1360,43 @@ function DGenArt() {
 }
 
 var d = new DGenArt();
+
+function test_Vector2() {
+  let a = new d.Vector2(0, 0);
+  let b = d.Vector2.left();
+  let c = new d.Vector2(-1, 0.5);
+
+  let add_test = c.add(c);
+  add_test.sub_equals(c);
+  if (add_test.is_equal(c)) { add_test = true; } else { add_test = false; }
+  
+  let multiply_test = c.mult(3).mult_vec(b);
+  multiply_test.div_equals(2);
+  if (multiply_test.is_equal(new d.Vector2(1.5, 0))) { multiply_test = true; } else { multiply_test = false; }
+
+  let rotate_test = d.Vector2.left().rotate(d.Math.TAU()/4);
+  if (rotate_test.is_approx_equal(d.Vector2.down(), 0.01)) { rotate_test = true; } else { rotate_test = false; }
+
+  let lerp_test = b.lerp(d.Vector2.right(), 0.25);
+  if (lerp_test.is_equal(b.div(2))) { lerp_test = true; } else { lerp_test = false; }
+
+  let reflect_test = c.reflect_x().reflect_y();
+  console.log(reflect_test);
+  reflect_test.reflect_equals(new d.Vector2(-1, -1), new d.Vector2(1, 1));
+  console.log(reflect_test);
+  if (reflect_test.is_approx_equal(new d.Vector2(-0.5, 1), 0.01)) { reflect_test = true; } else { reflect_test = false; }
+
+  let rotlerp_test = b.rot_lerp(d.Vector2.up(), 0.5);
+  if (Math.abs(rotlerp_test.heading() - 3*d.Math.TAU()/8) < 0.01) { rotlerp_test == true; } else { rotlerp_test = false; }
+
+  console.log("Vector2 Testing: ");
+  console.log(add_test ? "Addition Functional" : "Addition Error");
+  console.log(multiply_test ? "Multiplication Functional" : "Multiplication Error");
+  console.log(rotate_test ? "Rotation Functional" : "Rotation Error");
+  console.log(lerp_test ? "Linear Interpolation Functional" : "Linear Interpolation Error");
+  console.log(reflect_test ? "Reflection Functional" : "Reflection Error");
+  console.log(rotlerp_test ? "Rotational Interpolation Functional" : "Rotational Interpolation Error");
+  console.log("Vector2 Testing Complete.")
+}
+
+test_Vector2();
